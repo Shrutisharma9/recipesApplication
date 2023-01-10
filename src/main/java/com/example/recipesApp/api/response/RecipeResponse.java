@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,22 +19,22 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class RecipeResponse {
-   // @ApiModelProperty(notes = "The id of the returned recipe", example = "1")
+    @ApiModelProperty(notes = "The id of the returned recipe", example = "1")
     private int id;
 
-    //@ApiModelProperty(notes = "The name of the returned recipe", example = "Pasta")
+    @ApiModelProperty(notes = "The name of the returned recipe", example = "Vegetable Rice")
     private String name;
 
-    //@ApiModelProperty(notes = "The type of the returned recipe", example = "VEGETARIAN")
+    @ApiModelProperty(notes = "The type of the returned recipe", example = "VEGETARIAN")
     private String type;
 
-    //@ApiModelProperty(notes = "Number of servings", example = "1")
+    @ApiModelProperty(notes = "Number of servings", example = "2")
     private int numberOfServings;
 
     @JsonIgnoreProperties("ingredients")
     private Set<IngredientResponse> ingredients;
 
-   // @ApiModelProperty(notes = "The instructions of the returned recipe", example = "Chop the onion, add to pasta and boil it")
+    @ApiModelProperty(notes = "The instructions of the returned recipe", example = "Wash the rice,add vegetables, add salt and water then boil it until cooked")
     private String instructions;
 
     @CreationTimestamp

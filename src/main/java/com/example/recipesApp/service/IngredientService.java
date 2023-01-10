@@ -27,7 +27,6 @@ public class IngredientService {
         this.messageProvider = messageProvider;
     }
 
-
     public Integer create(CreateIngredientRequest request) {
         IngredientEntity ingredient = new IngredientEntity();
 
@@ -38,17 +37,27 @@ public class IngredientService {
     }
 
 
-    public Set<IngredientEntity> getIngredientsByIds(List<Integer> authorIds) {
-        return authorIds.stream()
+    public Set<IngredientEntity> getIngredientsByIds(List<Integer> ingredientIds) {
+        return ingredientIds.stream()
                 .map(this::findById)
                 .collect(Collectors.toSet());
     }
+
     public IngredientEntity findById(int id) {
         return ingredientRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(messageProvider.getMessage("ingredient.notFound")));
     }
 
-    public List<IngredientEntity> list() {
-        return ingredientRepository.findAll();
+    public List<IngredientEntity> list(int page, int size) {
+        Pageable pageRequest
+                = PageRequest.of(page, size);
+        return ingredientRepository.findAll(pageRequest).getContent();
+    }
+
+    public void delete(int id) {
+        if (!ingredientRepository.existsById(id)) {
+            throw new NotFoundException(messageProvider.getMessage("ingredient.notFound"));
+        }
+        ingredientRepository.deleteById(id);
     }
 }

@@ -3,7 +3,6 @@ package com.example.recipesApp.config;
 import com.example.recipesApp.api.response.GenericResponse;
 import com.example.recipesApp.exception.InCustomException;
 import com.example.recipesApp.exception.NotFoundException;
-import com.example.recipesApp.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,13 +29,6 @@ public class ExceptionConfig {
     @Autowired
     public ExceptionConfig(MessageProvider messageProvider) {
         this.messageProvider = messageProvider;
-    }
-
-    @ExceptionHandler(ValidationException.class)
-    @ResponseBody
-    public ResponseEntity<GenericResponse> handleValidationException(ValidationException ex) {
-        HttpStatus status = ex.getStatus() == null ? HttpStatus.BAD_REQUEST : ex.getStatus();
-        return buildResponse(ex.getMessage(), status);
     }
 
     @ExceptionHandler(NotFoundException.class)
@@ -96,6 +88,16 @@ public class ExceptionConfig {
         return buildResponse(message, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseBody
+    public ResponseEntity<GenericResponse> handleRuntimeException(RuntimeException exp) {
+        if (exp instanceof InCustomException) {
+            return buildResponse(exp.getMessage(), ((InCustomException) exp).getStatus());
+        }
+
+        String message = messageProvider.getMessage("error.internalServerError");
+        return buildResponse(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
