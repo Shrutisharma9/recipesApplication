@@ -1,21 +1,31 @@
 package com.example.recipesApp.service;
 
 import com.example.recipesApp.api.request.CreateRecipeRequest;
+import com.example.recipesApp.api.request.RecipeSearchRequest;
+import com.example.recipesApp.api.request.SearchCriteriaRequest;
 import com.example.recipesApp.api.request.UpdateRecipeRequest;
+import com.example.recipesApp.api.response.RecipeResponse;
 import com.example.recipesApp.config.MessageProvider;
 import com.example.recipesApp.data.model.IngredientEntity;
 import com.example.recipesApp.data.model.RecipesEntity;
 import com.example.recipesApp.data.repository.RecipesRepository;
 import com.example.recipesApp.exception.NotFoundException;
+import com.example.recipesApp.search.RecipeSpecificationBuilder;
+import com.example.recipesApp.search.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -87,5 +97,40 @@ public class RecipeService {
 
             recipeRepository.deleteById(id);
         }
+
+
+    public List<RecipeResponse> findBySearchCriteria(RecipeSearchRequest recipeSearchRequest, int page, int size) {
+        List<SearchCriteria> searchCriterionRequests = new ArrayList<>();
+        RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder(searchCriterionRequests);
+        Pageable pageRequest = PageRequest.of(page, size, Sort.by("name")
+                .ascending());
+
+        Specification<RecipesEntity> recipeSpecification = createRecipeSpecification(recipeSearchRequest, builder);
+        Page<RecipesEntity> filteredRecipes = recipeRepository.findAll(recipeSpecification, pageRequest);
+
+        return filteredRecipes.toList().stream()
+                .map(RecipeResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    private Specification<RecipesEntity> createRecipeSpecification(RecipeSearchRequest recipeSearchRequest,
+                                                                   RecipeSpecificationBuilder builder) {
+        List<SearchCriteriaRequest> searchCriteriaRequests = recipeSearchRequest.getSearchCriteriaRequests();
+
+        if (Optional.ofNullable(searchCriteriaRequests).isPresent()) {
+            List<SearchCriteria> searchCriteriaList = searchCriteriaRequests.stream()
+                    .map(SearchCriteria::new)
+                    .collect(Collectors.toList());
+
+            if (!searchCriteriaList.isEmpty()) searchCriteriaList.forEach(criteria -> {
+                criteria.setDataOption(recipeSearchRequest.getDataOption());
+                builder.with(criteria);
+            });
+        }
+
+        return builder
+                .build()
+                .orElseThrow(() -> new NotFoundException(messageProvider.getMessage("criteria.notFound")));
+    }
 
     }

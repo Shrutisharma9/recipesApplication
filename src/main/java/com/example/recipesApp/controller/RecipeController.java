@@ -1,6 +1,7 @@
 package com.example.recipesApp.controller;
 
 import com.example.recipesApp.api.request.CreateRecipeRequest;
+import com.example.recipesApp.api.request.RecipeSearchRequest;
 import com.example.recipesApp.api.request.UpdateRecipeRequest;
 import com.example.recipesApp.api.response.CreateEntityResponse;
 import com.example.recipesApp.api.response.RecipeResponse;
@@ -99,5 +100,21 @@ public class RecipeController {
         logger.info("Deleting the recipe by its id. Id: {}", id);
         recipeService.deleteRecipe(id);
     }
+
+    @ApiOperation(value = "Search recipes by given parameters")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successful request"),
+            @ApiResponse(code = 404, message = "Different error messages related to criteria and recipe")
+
+    })
+    @RequestMapping(method = RequestMethod.POST, path = "/search")
+    public List<RecipeResponse> searchRecipe(@RequestParam(name = "page", defaultValue = "0") int page,
+                                             @RequestParam(name = "size", defaultValue = "10") int size,
+                                             @ApiParam(value = "Properties of the the search")
+                                             @RequestBody @Valid RecipeSearchRequest recipeSearchRequest) {
+        logger.info("Searching the recipe by given criteria");
+        return recipeService.findBySearchCriteria(recipeSearchRequest, page, size);
+    }
+
 
 }
