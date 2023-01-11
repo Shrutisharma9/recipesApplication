@@ -1,4 +1,4 @@
-package com.example.recipesApp;
+package com.example.recipesApp.testDataBuilder;
 
 import com.example.recipesApp.api.request.CreateIngredientRequest;
 

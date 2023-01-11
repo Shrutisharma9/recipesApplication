@@ -29,7 +29,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Recipe application",
-                "Documentation of the Recipe application web services.",
+                "Documentation of the Recipe application web service.",
                 "0.0.1",
                 "",
                 ApiInfo.DEFAULT_CONTACT,

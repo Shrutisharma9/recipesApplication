@@ -1,20 +1,16 @@
-package com.example.recipesApp.services;
+package com.example.recipesApp.service;
 
-import com.example.recipesApp.IngredientTestData;
+import com.example.recipesApp.testDataBuilder.IngredientTestData;
 import com.example.recipesApp.api.request.CreateIngredientRequest;
 import com.example.recipesApp.config.MessageProvider;
 import com.example.recipesApp.data.model.IngredientEntity;
 import com.example.recipesApp.data.repository.IngredientRepository;
 import com.example.recipesApp.exception.NotFoundException;
-import com.example.recipesApp.service.IngredientService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
