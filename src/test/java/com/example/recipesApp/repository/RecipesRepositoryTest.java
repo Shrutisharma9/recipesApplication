@@ -3,14 +3,16 @@ package com.example.recipesApp.repository;
 import com.example.recipesApp.data.model.RecipesEntity;
 import com.example.recipesApp.data.repository.RecipesRepository;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@RunWith(SpringRunner.class)
+@DataJpaTest
 public class RecipesRepositoryTest {
 
     @Autowired
