@@ -2,8 +2,6 @@ package com.example.recipesApp.api.request;
 
 import com.example.recipesApp.config.ValidationConfig;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
