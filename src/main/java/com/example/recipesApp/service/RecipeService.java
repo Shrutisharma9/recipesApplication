@@ -44,7 +44,12 @@ public class RecipeService {
             this.messageProvider = messageProvider;
         }
 
-        public Integer createRecipe(CreateRecipeRequest createRecipeRequest) {
+    /**
+     * the method is to create new recipe
+     * @param createRecipeRequest
+     * @return
+     */
+    public Integer createRecipe(CreateRecipeRequest createRecipeRequest) {
             Set<IngredientEntity> ingredients = Optional.ofNullable(createRecipeRequest.getIngredientIds())
                     .map(ingredientService::getIngredientsByIds)
                     .orElse(null);
@@ -61,6 +66,21 @@ public class RecipeService {
             return createdRecipe.getId();
         }
 
+        /**
+        *  this is the simple method to retrieve all the recipes available in the table and show the list on the home page
+        * @return
+        */
+        public List<RecipesEntity> getRecipeList(){
+            return recipeRepository.findAll();
+        }
+
+    /**
+     * it returns the recipe list based on page number and number of records passed as input
+     * for ex. page: 0 and size: 5 then it will show page 0 and 5 records on that page
+     * @param page
+     * @param size
+     * @return
+     */
         public List<RecipesEntity> getRecipeList(int page, int size) {
             Pageable pageRequest
                     = PageRequest.of(page, size);
@@ -72,7 +92,11 @@ public class RecipeService {
                     .orElseThrow(() -> new NotFoundException(messageProvider.getMessage("recipe.notFound")));
         }
 
-        public void updateRecipe(UpdateRecipeRequest updateRecipeRequest) {
+    /**
+     * this is to update existing recipe
+     * @param updateRecipeRequest
+     */
+    public void updateRecipe(UpdateRecipeRequest updateRecipeRequest) {
             RecipesEntity recipe = recipeRepository.findById(updateRecipeRequest.getId())
                     .orElseThrow(() -> new NotFoundException(messageProvider.getMessage("recipe.notFound")));
 
@@ -98,7 +122,13 @@ public class RecipeService {
             recipeRepository.deleteById(id);
         }
 
-
+    /**
+     * this will return the list of all the recipes available in the database based on input data either partial or full details
+     * @param recipeSearchRequest
+     * @param page
+     * @param size
+     * @return
+     */
     public List<RecipeResponse> findBySearchCriteria(RecipeSearchRequest recipeSearchRequest, int page, int size) {
         List<SearchCriteria> searchCriterionRequests = new ArrayList<>();
         RecipeSpecificationBuilder builder = new RecipeSpecificationBuilder(searchCriterionRequests);
