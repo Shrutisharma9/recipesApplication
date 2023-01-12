@@ -35,3 +35,17 @@ Then to run the project:
     mvn spring-boot:run
     
 ### Result page screenshots
+
+##### Home page
+
+![image](https://user-images.githubusercontent.com/117658621/212176519-573e4d5f-8125-47b3-9ad3-be5952ad93db.png)
+
+##### Swagger-ui to test CRUD Operations
+
+![image](https://user-images.githubusercontent.com/117658621/212176603-3da27f6f-8d2b-4e2c-a61e-f834c2e3911b.png)
+
+##### Result after click on Recipe List button
+
+![image](https://user-images.githubusercontent.com/117658621/212178078-c40a952e-497f-4359-a31d-d7eaba8acdcf.png)
+
+
